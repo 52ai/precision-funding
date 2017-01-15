@@ -44,8 +44,8 @@ for line in dorm_train.readlines():
     print line
     line_count += 1
 
-    #if datetime.strptime(line.split(',')[1].strip('\"'),'%Y/%m/%d %H:%M:%S') > datetime.strptime('2015/02/21 03:31:11','%Y/%m/%d %H:%M:%S'):
-    #   break
+    if datetime.strptime(line.split(',')[1].strip('\"'),'%Y/%m/%d %H:%M:%S') > datetime.strptime('2015/02/21 03:31:11','%Y/%m/%d %H:%M:%S'):
+       break
 
     if line.split(',')[0] is not None:
         if int(line.split(',')[0]) not in students_id_list:
@@ -55,16 +55,20 @@ print "学生人数：",len(students_id_list)
 print "门禁记录：",line_count
 # students_id_list = sorted(students_id_list)
 
+"""
 stu_id = open('Data/dorm/stu_id.txt', 'wb')
 
 for i in students_id_list:
     stu_id.write(str(i)+'\n')
 stu_id.close()
 """
+
+"""
 统计截止2014/03/21 03:31:11 共计3290个人
 统计截止2014/04/21 03:31:11 共计3300个人
 统计截止2014/05/21 03:31:11 共计3304个人
 统计截止2014/06/21 03:31:11 共计3306个人
+
 
 """
 
