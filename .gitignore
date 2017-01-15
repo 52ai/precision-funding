@@ -1,3 +1,5 @@
 # can ignore all directories and files in a directory
 Data/dorm/dorm_test.txt
 Data/dorm/dorm_train.txt
+Data/test/*
+Data/train/*
