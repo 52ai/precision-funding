@@ -40,6 +40,7 @@ from collections import namedtuple
 import pickle
 
 DormRecord = namedtuple('DormRecord', ['first_out', 'last_in'])  # 需要统计的信息以namedtuple的形式表示
+LineInfo = namedtuple('LineInfo', ['stu_id', 'date_info', 'time_info', 'status'])
 
 
 def store_structured_data(data_obj, file_to_store):
@@ -74,10 +75,23 @@ def retrieve_structured_data(file_of_retrieve):
 
 def manipulate_line_info(line):
     """
-    给定line，将该行数据处理成stu_id, date_info, time_info, staus
+    给定line，将该行数据处理成stu_id, date_info, time_info, status
     :param line:
-    :return: line_info_list
+    :return: LineInfo
     """
+    if line is not None:
+        line = line.split(",")
+        # print line
+        stu_id = str(line[0])
+        dt = datetime.strptime(line[1].strip('\"'), '%Y/%m/%d %H:%M:%S')
+        date_info = dt.date()
+        time_info = dt.time()
+        status = line[2].strip().strip('\"')
+        return LineInfo(stu_id, date_info, time_info, status)
+    else:
+        print "该行信息为空！"
+        return None
+
 
 
 def manipulate_data_info(file_to_manipulate, line_number):
@@ -93,10 +107,8 @@ def manipulate_data_info(file_to_manipulate, line_number):
     try:
         fw = open(file_to_manipulate, 'rb')
         for line in fw.readlines():
-            # print "line:",line
-            line = line.split(',')
-
-            print line
+            line_info = manipulate_line_info(line)
+            print line_info
             line_number -= 1
             if line_number == 0:
                 break
