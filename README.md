@@ -88,3 +88,24 @@
 
 统计完所有的训练数据,有寝室门禁的学生总人数为7834人，有效门禁记录为2115065次！
 
+处理数据的大致思路如下：
+
+    1.读取测试数据集的一行数据
+    2.将该行数据处理成stu_id, date_info, time_info, status
+    3.判断stu_id是否存在于stu_id_dict中
+        如不存在：
+            if status == "1":
+                first_out = time_info
+                last_in = None
+            if status == "0":
+                first_out = None
+                last_in = time_info
+            在stu_id_dict中添加一条记录{stu_id_dict: {date_info: (first_out, last_in)}}
+        如果存在：
+            判断date_info 时候存在于stu_id_dict.get(stu_info_dict)中
+                如果不存在：
+                    在stu_id_dict.get(stu_info_dict)中添加一条记录
+                如果存在：
+                    则判断status的状态，然后根据规则，修改first_out和last_in
+    4.如此循环直至，训练集所有的记录都处理完成
+

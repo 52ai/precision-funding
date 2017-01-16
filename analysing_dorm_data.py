@@ -33,31 +33,13 @@ statistic_info = DormRecord(dt1.time(), dt2.time())
 13126,"2014/01/21 03:31:11","1"
 13126,"2014/01/21 04:53:55","0"
 其中“1”表示出寝室，"0"表示进寝室
-处理数据的大致思路如下：
-1.读取测试数据集的一行数据
-2.将该行数据处理成stu_id, date_info, time_info, status
-3.判断stu_id是否存在于stu_id_dict中
-    如不存在：
-        if status == "1":
-            first_out = time_info
-            last_in = None
-        if status == "0":
-            first_out = None
-            last_in = time_info
-        在stu_id_dict中添加一条记录{stu_id_dict: {date_info: (first_out, last_in)}}
-    如果存在：
-        判断date_info 时候存在于stu_id_dict.get(stu_info_dict)中
-            如果不存在：
-                在stu_id_dict.get(stu_info_dict)中添加一条记录
-            如果存在：
-                则判断status的状态，然后根据规则，修改first_out和last_in
-4.如此循环直至，训练集所有的记录都处理完成
-
 """
 
 from datetime import *
 from collections import namedtuple
 import pickle
+
+DormRecord = namedtuple('DormRecord', ['first_out', 'last_in'])  # 需要统计的信息以namedtuple的形式表示
 
 
 def store_structured_data(data_obj, file_to_store):
@@ -90,35 +72,39 @@ def retrieve_structured_data(file_of_retrieve):
         return None
 
 
-def manipulation_date(file_to_manipulate, line_number):
+def manipulate_line_info(line):
+    """
+    给定line，将该行数据处理成stu_id, date_info, time_info, staus
+    :param line:
+    :return: line_info_list
+    """
 
 
+def manipulate_data_info(file_to_manipulate, line_number):
+    """
+    根据要求把数据处理成需要的格式,并将数据存储到dorm_info_pickle.txt
+    其中line_number表示需要处理的行数
+    :param file_to_manipulate:
+    :param line_number:
+    :return: stu_id_dict
+    """
+    stu_id_dict = {}
+    date_info_dict = {}
+    try:
+        fw = open(file_to_manipulate, 'rb')
+        for line in fw.readlines():
+            # print "line:",line
+            line = line.split(',')
 
-"""
-DormRecord = namedtuple('DormRecord', ['first_out', 'last_in'])
-students_dorm_record_dict = {}
-dt1 = datetime.strptime('2014/01/21 03:31:11', '%Y/%m/%d %H:%M:%S')
-dt2 = datetime.strptime('2014/01/21 21:31:11', '%Y/%m/%d %H:%M:%S')
+            print line
+            line_number -= 1
+            if line_number == 0:
+                break
+    finally:
+        fw.close()
+    return stu_id_dict
 
-statistic_tuple = DormRecord(dt1.time(),dt2.time())
 
-statistic_dict = {}
-statistic_dict.setdefault(dt1.date(),statistic_tuple )
-students_id = 13126
-students_dorm_record_dict.setdefault(students_id,statistic_dict)
-
-dt3 = datetime.strptime('2014/01/22 05:31:11', '%Y/%m/%d %H:%M:%S')
-dt4 = datetime.strptime('2014/01/22 11:31:11', '%Y/%m/%d %H:%M:%S')
-
-statistic_tuple = DormRecord(dt3.time(),dt4.time())
-
-statistic_dict.setdefault(str(dt3.date()),statistic_tuple )
-students_id = 13126
-students_dorm_record_dict.setdefault(students_id,statistic_dict)
-print students_dorm_record_dict
-print 13126 in students_dorm_record_dict
-print students_dorm_record_dict.get(13126).get('2014-01-22').first_out
-test_pickle = "Data/dorm/test_pickle.txt"
-store_structured_data(students_dorm_record_dict, test_pickle)
-# print retrieve_structured_data(test_pickle)
-"""
+if __name__ == "__main__":
+    dorm_train = "Data/dorm/dorm_train.txt"
+    print manipulate_data_info(dorm_train, 5)
