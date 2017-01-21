@@ -1,4 +1,4 @@
-# precision-funding
+# Precision-Funding
 来不及解释，快上车！PKBigData大学生助学金精准资助预测算法竞赛~
 
     队名：三个皮匠
