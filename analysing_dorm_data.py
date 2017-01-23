@@ -102,6 +102,8 @@ def manipulate_data_info(file_to_manipulate, line_number):
     :return: stu_id_dict
     """
     stu_id_dict = {}
+    # 早上出门的时间默认为23:59:59 晚上回去的时间默认为00:00:00
+
     try:
         fw = open(file_to_manipulate, 'rb')
         for line in fw.readlines():
@@ -109,39 +111,7 @@ def manipulate_data_info(file_to_manipulate, line_number):
             """
             开始处理
             """
-            if line_info.stu_id not in stu_id_dict:
-                    if line_info.status == '1':
-                        first_out = line_info.time_info
-                        last_in = None
-                    elif line_info.status == "0":
-                        first_out = None
-                        last_in = line_info.time_info
-                    dorm_record = DormRecord(first_out, last_in)
-                    date_info_dict = {}
-                    date_info_dict.setdefault(line_info.date_info, dorm_record)
-                    stu_id_dict.setdefault(line_info.stu_id, date_info_dict)
-            elif line_info.stu_id in stu_id_dict:
-                if line_info.date_info not in stu_id_dict.get(line_info.stu_id):
-                    if line_info.status == '1':
-                        first_out = line_info.time_info
-                        last_in = None
-                    elif line_info.status == "0":
-                        first_out = None
-                        last_in = line_info.time_info
-                    dorm_record = DormRecord(first_out, last_in)
-                    date_info_dict = {}
-                    date_info_dict.setdefault(line_info.date_info, dorm_record)
-                    stu_id_dict.setdefault(line_info.stu_id, date_info_dict)
-                elif line_info.date_info in stu_id_dict.get(line_info.stu_id):
-                    if line_info.status == '1':
-                        print (stu_id_dict.get(line_info.stu_id).get(line_info.date_info))
-                        #if stu_id_dict.get(line_info.stu_id).get(line_info.date_info).first_out > line_info.time_info:
-                        #    stu_id_dict.get(line_info.stu_id).get(line_info.date_info).first_out = line_info.time_info
-                    elif line_info.status == '0':
-                        print stu_id_dict.get(line_info.stu_id).get(line_info.date_info)
-                        #if stu_id_dict.get(line_info.stu_id).get(line_info.date_info).last_in < line_info.time_info:
-                        #    stu_id_dict.get(line_info.stu_id).get(line_info.date_info).last_in = line_info.time_info
-
+            print line_info
 
 
             """
@@ -158,4 +128,4 @@ def manipulate_data_info(file_to_manipulate, line_number):
 
 if __name__ == "__main__":
     dorm_train = "Data/dorm/dorm_train.txt"
-    print manipulate_data_info(dorm_train, 10)
+    print manipulate_data_info(dorm_train, 5)
